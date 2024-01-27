@@ -8,10 +8,13 @@
 / {
 
 	axi {
-		bootph-all;
-
+		
 		ahb@c0000000 {
-			bootph-all;
+			compatible = "simple-bus";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			dma-ranges = <0x00000000 0xc0000000 0x3fff0000>;
+			ranges = <0x00000000 0xc0000000 0x3fff0000>;
 
 			spi0: spi@200 {
 				compatible = "hpe,gxp-spi";
@@ -19,6 +22,13 @@
 				#address-cells = <1>;
 				#size-cells = <0>;
 				status = "okay";
+			
+				spi_flash: flash@0 {
+					compatible = "jedec,spi-nor";
+					reg = <0>;
+					spi-max-frequency = <40000000>;
+					status = "okay";
+				};
 			};
 		};
 	};

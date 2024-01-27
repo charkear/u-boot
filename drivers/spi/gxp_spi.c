@@ -235,7 +235,7 @@ static int gxp_spi_claim_bus(struct udevice *dev)
 
 	spi_set_mode(priv, MANUAL_MODE);
 
-	/* exit 4 bytes addr mode, uboot spi_flash only supports 3 byets address mode */
+	/* exit 4 bytes addr mode, uboot spi_flash only supports 3 byte address mode */
 	cmd = 0xe9;
 	gxp_spi_xfer(dev, 1 * 8, &cmd, NULL, SPI_XFER_BEGIN | SPI_XFER_END);
 	return 0;

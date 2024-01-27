@@ -52,25 +52,35 @@
 			cache-level = <2>;
 		};
 
+		ahb@80000000 {
+			compatible = "simple-bus";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			dma-ranges = <0x00000000 0x80000000 0x20000000>;
+			ranges = <0x00000000 0x80000000 0x20000000>;
+			
+			vic1: interrupt-controller@f00000 {
+				compatible = "arm,pl192-vic";
+				reg = <0xf00000 0x1000>;
+				interrupt-controller;
+				#interrupt-cells = <1>;
+			};
+		};
+
 		ahb@c0000000 {
 			compatible = "simple-bus";
 			#address-cells = <1>;
 			#size-cells = <1>;
-			ranges = <0x0 0xc0000000 0x30000000>;
-			dma-ranges;
+			dma-ranges = <0x00000000 0xc0000000 0x3fff0000>;
+			ranges = <0x00000000 0xc0000000 0x3fff0000>;
 
-			vic0: interrupt-controller@eff0000 {
-				compatible = "arm,pl192-vic";
-				reg = <0xeff0000 0x1000>;
-				interrupt-controller;
-				#interrupt-cells = <1>;
-			};
-
-			vic1: interrupt-controller@80f00000 {
-				compatible = "arm,pl192-vic";
-				reg = <0x80f00000 0x1000>;
-				interrupt-controller;
-				#interrupt-cells = <1>;
+			st: timer@80 {
+				compatible = "hpe,gxp-timer";
+				reg = <0x80 0x16>;
+				interrupts = <0>;
+				interrupt-parent = <&vic0>;
+				clocks = <&iopclk>;
+				clock-names = "iop";
 			};
 
 			uarta: serial@e0 {
@@ -107,20 +117,18 @@
 				interrupt-parent = <&vic0>;
 			};
 
-			st: timer@80 {
-				compatible = "hpe,gxp-timer";
-				reg = <0x80 0x16>;
-				interrupts = <0>;
-				interrupt-parent = <&vic0>;
-				clocks = <&iopclk>;
-				clock-names = "iop";
-			};
-
 			usb1: usb@efe0100 {
 				compatible = "hpe,gxp-ohci", "generic-ohci";
 				reg = <0xefe0100 0x110>;
 				interrupts = <6>;
 				interrupt-parent = <&vic0>;
+			};
+
+			vic0: interrupt-controller@eff0000 {
+				compatible = "arm,pl192-vic";
+				reg = <0xeff0000 0x1000>;
+				interrupt-controller;
+				#interrupt-cells = <1>;
 			};
 		};
 	};
