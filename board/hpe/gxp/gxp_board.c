@@ -15,11 +15,11 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
-#define ECHI_CMD 0xcefe0010
+#define EHCI_CMD 0xcefe0010
 
 int board_init(void)
 {
-	writel(0x00080002, ECHI_CMD);
+	writel(0x00080002, EHCI_CMD);
 
 	return 0;
 }
